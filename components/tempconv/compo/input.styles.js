@@ -7,13 +7,13 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
         width: "100%",
     },
-    input: {
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
         backgroundColor: "#ffffff",
         height: 50,
         width: 200,
         borderRadius: 10,
-        paddingLeft: 15,
-        fontSize: 20,
         marginRight: 10,
         borderWidth: 2,
         borderColor: "skyblue",  
@@ -22,11 +22,20 @@ export const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 5,
         elevation: 5,
+        paddingHorizontal: 10,
+    },
+    inputIcon: {
+        marginRight: 5,
+    },
+    input: {
+        flex: 1,
+        fontSize: 20,
+        color: "#34495E",
+        height: '100%',
     },
     unitText: {
-        fontSize: 20,
+        fontSize: 24,
         color: "#EAECEE",  
         fontWeight: "bold",
-        textTransform: "uppercase",
     }
 });
