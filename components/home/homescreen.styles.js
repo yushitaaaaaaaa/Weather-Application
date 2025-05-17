@@ -3,48 +3,98 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#1E272E",  // Dark theme background
+        width: '100%',
+        height: '100%',  // Full height for background image
+    },
+    scrollContainer: {
+        flexGrow: 1,
         alignItems: "center",
         justifyContent: "center",
         padding: 20,
     },
-    contentContainer: { 
-        backgroundColor: "#34495E", // Matching forecast screen box style
-        padding: 25,
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(30, 39, 46, 0.7)', // Semi-transparent background
         borderRadius: 10,
-        width: "90%",
+        padding: 20,
+        marginTop: 150,
+    },
+    loadingText: {
+        color: '#fff',
+        marginTop: 10,
+        fontSize: 16,
+    },
+    contentContainer: { 
+        backgroundColor: "rgba(52, 73, 94, 0.85)", // Semi-transparent box
+        padding: 25,
+        borderRadius: 15,
+        width: "95%",
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: { width: 3, height: 3 },
         shadowOpacity: 0.3,
         shadowRadius: 5,
         elevation: 5,  // Shadow for Android
+        marginVertical: 20,
     },
     heading: {
-        fontSize: 24,
+        fontSize: 28,
         fontWeight: "bold",
         color: "#fff",
         marginBottom: 15,
         textAlign: "center",
     },
-    label: {
+    locationContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    locationText: {
         fontSize: 18,
-        fontWeight: "bold",
         color: "#EAECEE",
-        marginTop: 15,
-        textAlign: "center",
+        marginLeft: 5,
+        fontWeight: "500",
     },
-    box: {
-        width: "80%",
-        padding: 15,
-        backgroundColor: "skyblue",
-        borderRadius: 10,
-        marginTop: 5,
-        alignItems: "center",
+    weatherIconContainer: {
+        alignItems: 'center',
+        marginBottom: 20,
     },
-    text: {
-        fontSize: 18,
+    weatherCondition: {
+        fontSize: 22,
         color: "#fff",
         fontWeight: "bold",
+        marginTop: 5,
+    },
+    detailsContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+    detailBox: {
+        width: '47%',  // Two items per row
+        backgroundColor: "rgba(135, 206, 235, 0.25)",  // Lighter skyblue with transparency
+        padding: 15,
+        borderRadius: 12,
+        marginVertical: 8,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: { width: 1, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+        elevation: 3,
+    },
+    detailLabel: {
+        fontSize: 16,
+        color: "#EAECEE",
+        marginTop: 5,
+    },
+    detailValue: {
+        fontSize: 20,
+        color: "skyblue",
+        fontWeight: "bold",
+        marginTop: 5,
     },
 });

@@ -2,10 +2,11 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
     button: {
-        backgroundColor: "skyblue",  // Sky Blue (Similar to forecast's temperature)
+        backgroundColor: "skyblue",
+        flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        width: 180, 
+        width: 200, 
         padding: 15, 
         borderRadius: 10,
         shadowColor: "#000",
@@ -19,6 +20,6 @@ export const styles = StyleSheet.create({
         fontWeight: "bold",
         color: "#ffffff",
         textTransform: "uppercase",
-        textAlign: "center",
+        marginLeft: 8,
     }
 });
