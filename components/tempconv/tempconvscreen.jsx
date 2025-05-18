@@ -10,6 +10,8 @@ import { styles } from "./tempconv.styles";
 export default function TempConvScreen() {
     const [temp, setTemp] = useState("");
     const [unit, setUnit] = useState(UNITS.cel);
+    const [showConverted, setShowConverted] = useState(false);
+    const [convertedValue, setConvertedValue] = useState("");
 
     const getTemperatureIcon = () => {
         if (!temp || isNaN(parseFloat(temp))) {
@@ -32,9 +34,15 @@ export default function TempConvScreen() {
 
     const handleConvert = () => {
         if (!temp) return; 
+        
         const newUnit = getOppositeUnit(unit);
-        setTemp(convertTempTo(parseFloat(temp), newUnit)); 
+        const converted = convertTempTo(parseFloat(temp), newUnit);
+        
+        setConvertedValue(temp);
+        
+        setTemp(converted);
         setUnit(newUnit);
+        setShowConverted(true);
     };
 
     return (
@@ -49,19 +57,20 @@ export default function TempConvScreen() {
             >
                 <View style={styles.boxContainer}>
                     
-                    <View style={styles.weatherIconContainer}>
-                        {getTemperatureIcon()}
-                        <Text style={styles.weatherCondition}>
-                            {temp ? `${temp}° ${unit}` : "Temperature"}
-                        </Text>
-                    </View>
-                    
                     <View style={styles.inputContainer}>
-                        <Input defaultValue={temp} onChange={setTemp} unit={unit} />
+                        <Input defaultValue={temp} onChange={(value) => {
+                            setTemp(value);
+                            setShowConverted(false); 
+                        }} unit={unit} />
                     </View>
                     
                     <View style={styles.detailBox}>
-                        <DisplayTemp temp={temp} unit={unit} />
+                        <DisplayTemp 
+                            temp={temp} 
+                            unit={unit} 
+                            showConverted={showConverted}
+                            convertedValue={convertedValue}
+                        />
                     </View>
                     
                     <View style={styles.buttonContainer}>

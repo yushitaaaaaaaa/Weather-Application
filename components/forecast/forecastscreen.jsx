@@ -71,15 +71,13 @@ export const ForecastScreen = () => {
         getCurrentLocation();
     }, []);
 
-    // Updated groupByDay function to ensure proper date handling
     const groupByDay = () => {
         if (!weather || !weather.list) return [];
         
         const days = {};
         weather.list.forEach(item => {
-            // Store the timestamp directly to avoid date parsing issues
             const dateObj = new Date(item.dt * 1000);
-            const dateKey = dateObj.toISOString().split('T')[0]; // Use ISO date format as key (YYYY-MM-DD)
+            const dateKey = dateObj.toISOString().split('T')[0];
             
             if (!days[dateKey]) {
                 days[dateKey] = {
@@ -172,7 +170,6 @@ export const ForecastScreen = () => {
             ) : (
                 <View style={styles.forecastContainer}>
                     <View style={styles.headerContainer}>
-                        {/* <Text style={styles.heading}>5-Day Forecast</Text> */}
                         {weather && (
                             <Text style={styles.locationText}>
                                 {weather.city.name}, {weather.city.country}
