@@ -87,28 +87,24 @@ export const HomeScreen = () => {
                         </View>
 
                         <View style={styles.detailsContainer}>
-                            {/* Temperature */}
                             <View style={styles.detailBox}>
                                 <Ionicons name="thermometer" size={30} color="#fff" />
                                 <Text style={styles.detailLabel}>Temperature</Text>
                                 <Text style={styles.detailValue}>{weather.main.temp}°C</Text>
                             </View>
 
-                            {/* Feels Like */}
                             <View style={styles.detailBox}>
                                 <Ionicons name="body" size={30} color="#fff" />
                                 <Text style={styles.detailLabel}>Feels Like</Text>
                                 <Text style={styles.detailValue}>{weather.main.feels_like}°C</Text>
                             </View>
 
-                            {/* Humidity */}
                             <View style={styles.detailBox}>
                                 <Ionicons name="water" size={30} color="#fff" />
                                 <Text style={styles.detailLabel}>Humidity</Text>
                                 <Text style={styles.detailValue}>{weather.main.humidity}%</Text>
                             </View>
 
-                            {/* Wind Speed */}
                             <View style={styles.detailBox}>
                                 <Ionicons name="speedometer" size={30} color="#fff" />
                                 <Text style={styles.detailLabel}>Wind Speed</Text>

@@ -4,7 +4,7 @@ export const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        height: '100%',  // Full height for background image
+        height: '100%', 
     },
     scrollContainer: {
         flexGrow: 1,
@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(30, 39, 46, 0.7)', // Semi-transparent background
+        backgroundColor: 'rgba(30, 39, 46, 0.7)', 
         borderRadius: 10,
         padding: 20,
         marginTop: 150,
