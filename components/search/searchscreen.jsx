@@ -16,7 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from "expo-status-bar";
 
 export const SearchScreen = () => {
-  const API_KEY = "519ddb13511ef15123d5a8f8b5290d82";
+  const API_KEY = "{YOUR_API_KEY}";
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState(null);
   const [forecast, setForecast] = useState(null);
