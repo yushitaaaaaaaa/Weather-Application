@@ -1,4 +1,3 @@
-
 const UNITS = {
     cel: "C",
     farh: "F"
