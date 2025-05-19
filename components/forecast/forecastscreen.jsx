@@ -14,7 +14,7 @@ import { styles } from "./forecastscreen.styles";
 import { Ionicons } from '@expo/vector-icons';
 
 export const ForecastScreen = () => {
-    const API_KEY = "519ddb13511ef15123d5a8f8b5290d82";
+    const API_KEY = "YOUR_API_KEY";
     const [weather, setWeather] = useState(null);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
