@@ -1,9 +1,10 @@
 import { Text, View } from "react-native";
-import { styles } from "./displaytemp.styles";
+import { styles } from "../compo/displaytemp.styles";
 import { Ionicons } from '@expo/vector-icons';
+import { UNITS } from "../compo/temperature";
 
-export function DisplayTemp({ temp, unit }) {
-    const getTemperatureIcon = () => {
+export function DisplayTemp({ inputTemp, inputUnit, convertedTemp, showConverted }) {
+    const getTemperatureIcon = (temp, unit) => {
         const numTemp = parseFloat(temp);
         
         if (isNaN(numTemp)) return "thermometer-outline";
@@ -17,14 +18,36 @@ export function DisplayTemp({ temp, unit }) {
         }
     };
 
+    const oppositeUnit = inputUnit === UNITS.cel ? UNITS.farh : UNITS.cel;
+
     return (
         <View style={styles.container}>
             <View style={styles.tempContainer}>
-                <Ionicons name={getTemperatureIcon()} size={40} color="skyblue" />
+                <Ionicons 
+                    name={getTemperatureIcon(inputTemp, inputUnit)} 
+                    size={40} 
+                    color="skyblue" 
+                />
                 <Text style={styles.temp}>
-                    {temp} °{unit}
+                    {inputTemp || "0"} °{inputUnit}
                 </Text>
             </View>
+            
+            {showConverted && (
+                <View style={styles.convertedContainer}>
+                    <Text style={styles.convertedLabel}>Converted Temperature:</Text>
+                    <View style={styles.tempContainer}>
+                        <Ionicons 
+                            name={getTemperatureIcon(convertedTemp, oppositeUnit)} 
+                            size={40} 
+                            color="skyblue" 
+                        />
+                        <Text style={styles.temp}>
+                            {convertedTemp} °{oppositeUnit}
+                        </Text>
+                    </View>
+                </View>
+            )}
         </View>
     );
 }

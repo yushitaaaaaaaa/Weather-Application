@@ -5,7 +5,7 @@ import { styles } from "./homescreen.styles";
 import { Ionicons } from '@expo/vector-icons';
 
 export const HomeScreen = () => {
-    const API_KEY = "{YOUR_API_KEY}";
+    const API_KEY = "519ddb13511ef15123d5a8f8b5290d82";
     const [weather, setWeather] = useState(null);
     const [loading, setLoading] = useState(true);
 
