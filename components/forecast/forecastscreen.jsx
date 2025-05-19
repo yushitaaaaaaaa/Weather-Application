@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import * as Location from 'expo-location';
 import { 
     ActivityIndicator, 
@@ -14,11 +14,13 @@ import { styles } from "./forecastscreen.styles";
 import { Ionicons } from '@expo/vector-icons';
 
 export const ForecastScreen = () => {
-    const API_KEY = "{YOUR_API_KEY}";
+    const API_KEY = "519ddb13511ef15123d5a8f8b5290d82";
     const [weather, setWeather] = useState(null);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [location, setLocation] = useState(null);
+    const hourlyFlatListRefs = {};
+    const scrollPositions = useRef({});
 
     const fetchWeather = async (lat, lon) => {
         try {
@@ -106,13 +108,39 @@ export const ForecastScreen = () => {
         return 'partly-sunny'; 
     };
 
-    const renderDayItem = ({ item }) => {
+    const renderDayItem = ({ item, index }) => {
         const mainCondition = item.items[0].weather[0].main;
         const date = new Date(item.date).toLocaleDateString('en-US', { 
             weekday: 'long', 
             month: 'short', 
             day: 'numeric' 
         });
+
+        if (!hourlyFlatListRefs[index]) {
+            hourlyFlatListRefs[index] = React.createRef();
+        }
+
+        if (!scrollPositions.current[index]) {
+            scrollPositions.current[index] = 0;
+        }
+
+        const handleScroll = () => {
+            if (hourlyFlatListRefs[index] && hourlyFlatListRefs[index].current) {
+                let nextPosition = scrollPositions.current[index] + 2;
+                
+                if (nextPosition >= item.items.length) {
+                    nextPosition = 0;
+                }
+
+                scrollPositions.current[index] = nextPosition;
+                
+                hourlyFlatListRefs[index].current.scrollToIndex({
+                    index: nextPosition,
+                    animated: true,
+                    viewPosition: 0
+                });
+            }
+        };
 
         return (
             <View style={styles.dayContainer}>
@@ -129,11 +157,30 @@ export const ForecastScreen = () => {
                     <Text style={styles.weatherCondition}>{mainCondition}</Text>
                 </View>
                 
+                <View style={styles.hourlyForecastHeader}>
+                    <Text style={styles.hourlyForecastText}>Hourly Forecast</Text>
+                    <TouchableOpacity style={styles.scrollIndicator} onPress={handleScroll}>
+                        <Ionicons name="chevron-forward" size={18} color="skyblue" />
+                    </TouchableOpacity>
+                </View>
+                
                 <FlatList
+                    ref={hourlyFlatListRefs[index]}
                     data={item.items}
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     keyExtractor={(forecast) => forecast.dt.toString()}
+                    onScrollToIndexFailed={(info) => {
+                        const wait = new Promise(resolve => setTimeout(resolve, 500));
+                        wait.then(() => {
+                            if (hourlyFlatListRefs[index]?.current) {
+                                hourlyFlatListRefs[index].current.scrollToIndex({ 
+                                    index: Math.min(info.index, item.items.length - 1),
+                                    animated: true 
+                                });
+                            }
+                        });
+                    }}
                     renderItem={({ item: forecast }) => (
                         <View style={styles.hourlyItemContainer}>
                             <Text style={styles.hourText}>
@@ -183,7 +230,7 @@ export const ForecastScreen = () => {
                     <FlatList
                         data={groupByDay()}
                         renderItem={renderDayItem}
-                        keyExtractor={(item) => item.date.toString()}
+                        keyExtractor={(item, index) => `${item.date.toString()}-${index}`}
                         contentContainerStyle={styles.listContainer}
                         showsVerticalScrollIndicator={false}
                         refreshControl={

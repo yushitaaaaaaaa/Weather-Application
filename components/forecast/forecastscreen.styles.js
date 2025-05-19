@@ -99,6 +99,31 @@ export const styles = StyleSheet.create({
         fontWeight: "bold",
         marginLeft: 10,
     },
+    hourlyForecastHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    hourlyForecastText: {
+        fontSize: 14,
+        color: '#fff',
+        fontWeight: '500',
+    },
+    scrollIndicator: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'rgba(30, 39, 46, 0.4)',
+        paddingHorizontal: 8,
+        paddingVertical: 3,
+        borderRadius: 12,
+        elevation: 2,
+    },
+    scrollText: {
+        fontSize: 12,
+        color: 'skyblue',
+        marginLeft: 2,
+    },
     hourlyItemContainer: {
         backgroundColor: "rgba(30, 39, 46, 0.6)",
         borderRadius: 10,

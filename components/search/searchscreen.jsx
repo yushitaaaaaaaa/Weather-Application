@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   Text,
   TextInput,
@@ -16,7 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from "expo-status-bar";
 
 export const SearchScreen = () => {
-  const API_KEY = "{YOUR_API_KEY}";
+  const API_KEY = "519ddb13511ef15123d5a8f8b5290d82";
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState(null);
   const [forecast, setForecast] = useState(null);
@@ -24,6 +24,10 @@ export const SearchScreen = () => {
   const [forecastLoading, setForecastLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showForecast, setShowForecast] = useState(false);
+  
+  // Create refs at the component level, not inside render functions
+  const hourlyFlatListRefs = useRef({});
+  const scrollPositions = useRef({});
 
   const fetchWeather = async () => {
     if (!city.trim()) {
@@ -116,13 +120,41 @@ export const SearchScreen = () => {
     }));
   };
 
-  const renderDayItem = ({ item }) => {
+  const renderDayItem = ({ item, index }) => {
     const mainCondition = item.items[0].weather[0].main;
     const date = new Date(item.date).toLocaleDateString('en-US', { 
       weekday: 'long', 
       month: 'short', 
       day: 'numeric' 
     });
+
+    // Instead of creating refs inside render, ensure they exist in the ref objects
+    if (!hourlyFlatListRefs.current[index]) {
+      hourlyFlatListRefs.current[index] = React.createRef();
+    }
+
+    if (!scrollPositions.current[index]) {
+      scrollPositions.current[index] = 0;
+    }
+
+    // Handle scroll functionality
+    const handleScroll = () => {
+      if (hourlyFlatListRefs.current[index] && hourlyFlatListRefs.current[index].current) {
+        let nextPosition = scrollPositions.current[index] + 2;
+        
+        if (nextPosition >= item.items.length) {
+          nextPosition = 0;
+        }
+
+        scrollPositions.current[index] = nextPosition;
+        
+        hourlyFlatListRefs.current[index].current.scrollToIndex({
+          index: nextPosition,
+          animated: true,
+          viewPosition: 0
+        });
+      }
+    };
 
     return (
       <View style={styles.dayContainer}>
@@ -139,11 +171,31 @@ export const SearchScreen = () => {
           <Text style={styles.weatherCondition}>{mainCondition}</Text>
         </View>
         
+        {/* Added hourly forecast header with scroll button */}
+        <View style={styles.hourlyForecastHeader}>
+          <Text style={styles.hourlyForecastText}>Hourly Forecast</Text>
+          <TouchableOpacity style={styles.scrollIndicator} onPress={handleScroll}>
+            <Ionicons name="chevron-forward" size={18} color="skyblue" />
+          </TouchableOpacity>
+        </View>
+        
         <FlatList
+          ref={hourlyFlatListRefs.current[index]}
           data={item.items}
           horizontal
           showsHorizontalScrollIndicator={false}
           keyExtractor={(forecast) => forecast.dt.toString()}
+          onScrollToIndexFailed={(info) => {
+            const wait = new Promise(resolve => setTimeout(resolve, 500));
+            wait.then(() => {
+              if (hourlyFlatListRefs.current[index]?.current) {
+                hourlyFlatListRefs.current[index].current.scrollToIndex({ 
+                  index: Math.min(info.index, item.items.length - 1),
+                  animated: true 
+                });
+              }
+            });
+          }}
           renderItem={({ item: forecast }) => (
             <View style={styles.hourlyItemContainer}>
               <Text style={styles.hourText}>

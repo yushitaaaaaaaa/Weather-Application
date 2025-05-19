@@ -1,25 +1,30 @@
 import { useState } from "react";
-import { View, ImageBackground, Text, StatusBar, ScrollView } from "react-native";
+import { View, ImageBackground, Text, StatusBar, ScrollView, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { UNITS, convertTempTo, getOppositeUnit } from "../tempconv/compo/temperature";
+import { UNITS, convertTempTo, getOppositeUnit } from "./compo/temperature";
 import { Input } from "./compo/input";
 import { DisplayTemp } from "./compo/displaytemp";
 import { ConvertButton } from "./compo/convertbutton";
 import { styles } from "./tempconv.styles";
 
 export default function TempConvScreen() {
-    const [temp, setTemp] = useState("");
-    const [unit, setUnit] = useState(UNITS.cel);
+    const [inputTemp, setInputTemp] = useState("");
+    const [inputUnit, setInputUnit] = useState(UNITS.cel);
+    const [convertedTemp, setConvertedTemp] = useState("");
     const [showConverted, setShowConverted] = useState(false);
-    const [convertedValue, setConvertedValue] = useState("");
+
+    const handleInputUnitToggle = () => {
+        setInputUnit(getOppositeUnit(inputUnit));
+        setShowConverted(false);
+    };
 
     const getTemperatureIcon = () => {
-        if (!temp || isNaN(parseFloat(temp))) {
+        if (!inputTemp || isNaN(parseFloat(inputTemp))) {
             return <Ionicons name="thermometer-outline" size={80} color="skyblue" />;
         }
         
-        const value = parseFloat(temp);
-        const celsiusValue = unit === UNITS.cel ? value : convertTempTo(value, UNITS.cel);
+        const value = parseFloat(inputTemp);
+        const celsiusValue = inputUnit === UNITS.cel ? value : convertTempTo(value, UNITS.cel);
         
         if (celsiusValue < 0) {
             return <Ionicons name="snow-outline" size={80} color="skyblue" />;
@@ -33,15 +38,12 @@ export default function TempConvScreen() {
     };
 
     const handleConvert = () => {
-        if (!temp) return; 
+        if (!inputTemp) return; 
         
-        const newUnit = getOppositeUnit(unit);
-        const converted = convertTempTo(parseFloat(temp), newUnit);
+        const oppositeUnit = getOppositeUnit(inputUnit);
+        const converted = convertTempTo(parseFloat(inputTemp), oppositeUnit);
         
-        setConvertedValue(temp);
-        
-        setTemp(converted);
-        setUnit(newUnit);
+        setConvertedTemp(converted);
         setShowConverted(true);
     };
 
@@ -56,25 +58,60 @@ export default function TempConvScreen() {
                 showsVerticalScrollIndicator={false}
             >
                 <View style={styles.boxContainer}>
+                    <View style={styles.unitSelector}>
+                        <Text style={styles.unitSelectorLabel}>Select Input Unit:</Text>
+                        <TouchableOpacity 
+                            style={[
+                                styles.unitSelectorButton, 
+                                inputUnit === UNITS.cel && styles.unitSelectorButtonActive
+                            ]}
+                            onPress={() => {
+                                if (inputUnit !== UNITS.cel) handleInputUnitToggle();
+                            }}
+                        >
+                            <Text style={[
+                                styles.unitSelectorText,
+                                inputUnit === UNITS.cel && styles.unitSelectorTextActive
+                            ]}>°C</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                            style={[
+                                styles.unitSelectorButton, 
+                                inputUnit === UNITS.farh && styles.unitSelectorButtonActive
+                            ]}
+                            onPress={() => {
+                                if (inputUnit !== UNITS.farh) handleInputUnitToggle();
+                            }}
+                        >
+                            <Text style={[
+                                styles.unitSelectorText,
+                                inputUnit === UNITS.farh && styles.unitSelectorTextActive
+                            ]}>°F</Text>
+                        </TouchableOpacity>
+                    </View>
                     
                     <View style={styles.inputContainer}>
-                        <Input defaultValue={temp} onChange={(value) => {
-                            setTemp(value);
-                            setShowConverted(false); 
-                        }} unit={unit} />
+                        <Input 
+                            defaultValue={inputTemp} 
+                            onChange={(value) => {
+                                setInputTemp(value);
+                                setShowConverted(false); 
+                            }} 
+                            unit={inputUnit} 
+                        />
                     </View>
                     
                     <View style={styles.detailBox}>
                         <DisplayTemp 
-                            temp={temp} 
-                            unit={unit} 
+                            inputTemp={inputTemp}
+                            inputUnit={inputUnit}
+                            convertedTemp={convertedTemp}
                             showConverted={showConverted}
-                            convertedValue={convertedValue}
                         />
                     </View>
                     
                     <View style={styles.buttonContainer}>
-                        <ConvertButton onPress={handleConvert} unit={getOppositeUnit(unit)} />
+                        <ConvertButton onPress={handleConvert} unit={getOppositeUnit(inputUnit)} />
                     </View>
                 </View>
             </ScrollView>
