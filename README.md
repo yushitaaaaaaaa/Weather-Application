@@ -33,7 +33,7 @@ A comprehensive mobile application built with **React Native** that provides use
 
 
 ## 🔑 API Keys
-This application uses the OpenWeatherMap API. You'll need to:
+This application uses the [OpenWeatherMap API](https://openweathermap.org/api). You'll need to:
 
 1. Register at OpenWeatherMap to get an API key
 2. Replace the API_KEY constant in the relevant files with your own key
